@@ -1,3 +1,10 @@
+<!--
+ * @Description:App组件
+ * @Author: 张艺耀
+ * @Date: 2022-10-01 14:28:40
+ * @LastEditors: 张艺耀
+ * @LastEditTime: 2022-10-26 19:10:43
+-->
 <template>
   <div id="app">
     <router-view />
@@ -7,21 +14,5 @@
 <style lang="scss">
 #app {
   height: 100vh;
-}
-
-.van-nav-bar__content {
-  background-color: #b13a3d;
-}
-
-.van-nav-bar__text {
-  color: #fff;
-}
-
-.van-nav-bar .van-icon {
-  color: #fff;
-}
-
-.van-nav-bar__title {
-  color: #fff;
 }
 </style>

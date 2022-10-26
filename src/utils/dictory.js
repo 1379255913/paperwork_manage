@@ -1,3 +1,12 @@
+/*
+ * @Description: 查询时所需的字典
+ * @Author: 张艺耀
+ * @Date: 2022-10-08 22:47:13
+ * @LastEditors: 张艺耀
+ * @LastEditTime: 2022-10-26 11:13:19
+ */
+
+// 学位列表
 export const education = [
   {
     id: '312280198496120832',
@@ -1081,6 +1090,7 @@ export const education = [
   }
 ]
 
+// 国家列表
 export const national = [
   {
     id: '316531888233639936',
@@ -4789,6 +4799,7 @@ export const national = [
   }
 ]
 
+// 港澳通行证
 export const area1 = [
   {
     id: '316531900317429760',
@@ -4822,6 +4833,7 @@ export const area1 = [
   }
 ]
 
+// 台湾通行证
 export const area2 = [
   {
     id: '316531912225058816',
@@ -4840,6 +4852,7 @@ export const area2 = [
   }
 ]
 
+// 护照类型
 export const paperwork = [
   {
     id: '310478630889189376',

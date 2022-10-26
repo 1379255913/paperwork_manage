@@ -1,3 +1,11 @@
+<!--
+ * @Description:全局拉取为空组件
+ * @Author: 张艺耀
+ * @Date: 2022-10-13 17:07:11
+ * @LastEditors: 张艺耀
+ * @LastEditTime: 2022-10-26 11:30:55
+-->
+
 <template>
   <div class="pull">
     <div class="pull_title">

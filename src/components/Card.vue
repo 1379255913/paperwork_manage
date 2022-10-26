@@ -1,3 +1,11 @@
+<!--
+ * @Description: 全局卡片组件
+ * @Author: 张艺耀
+ * @Date: 2022-10-13 14:38:39
+ * @LastEditors: 张艺耀
+ * @LastEditTime: 2022-10-26 11:29:59
+-->
+
 <template>
   <div>
     <div class="card">
