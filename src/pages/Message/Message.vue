@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-10 14:45:02
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:42:51
+ * @LastEditTime: 2022-10-28 10:29:44
 -->
 <template>
   <div>
@@ -88,9 +88,9 @@ export default {
       getMessage().then(res => {
         console.log(res.page.list)
         const ans = []
-        res.page.list.forEach(res => {
-          res.isFold = true
-          ans.push(res)
+        res.page.list.forEach(each => {
+          each.isFold = true
+          ans.push(each)
         })
         this.messageList = ans
         this.$toast.clear()

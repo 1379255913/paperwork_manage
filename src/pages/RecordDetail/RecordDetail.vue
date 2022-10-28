@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 17:37:45
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:00:29
+ * @LastEditTime: 2022-10-28 11:45:44
 -->
 <template>
   <div>
@@ -55,7 +55,6 @@ export default {
     ...mapState({ storeData: 'selectDetail' })
   },
   created () {
-    console.log(this.$route.params.id)
     store.commit('getRecordDetailByID', this.$route.params.id)
     if (Object.keys(store.state.selectDetail).length !== 0) {
       const temp = []

@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 22:29:34
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:35:50
+ * @LastEditTime: 2022-10-28 12:03:46
 -->
 <template>
   <div>
@@ -131,33 +131,22 @@ export default {
         if (status === 5) {
           this.waitedNumber = res.page.count
         }
+        const obj = {
+          5: { tag: '等待审批', color: 'primary' },
+          0: { tag: '通过', color: 'success' },
+          1: { tag: '拒绝', color: 'danger' },
+          4: { tag: '撤回', color: 'default' }
+        }
         ans.forEach(each => {
           each.title = `${each.leader}提交的用证申请`
-          if (each.status === '5') {
-            each.tag = '等待审批'
-            each.color = 'primary'
-          } else if (each.status === '0') {
-            each.tag = '通过'
-            each.color = 'success'
-          } else if (each.status === '1') {
-            each.tag = '拒绝'
-            each.color = 'danger'
-          } else if (each.status === '4') {
-            each.tag = '撤回'
-            each.color = 'default'
-          }
+          each.tag = obj[each.status].tag
+          each.color = obj[each.status].color
           const temp = []
           console.log(each.approvalProcessList)
           temp.push(`联系电话：${this.userInfo.phone}`)
           temp.push(`工作部门：${this.userInfo.ssdwm}`)
           let processList = {}
-          if (each.approvalProcessList && each.approvalProcessList.length > 0) {
-            processList = each.approvalProcessList[0]
-            console.log(processList)
-          } else {
-            processList = undefined
-            console.log(2)
-          }
+          processList = each?.approvalProcessList?.[0]
           temp.push(`当前审批节点：${processList?.currentOrganization} ${processList?.approval}`)
           console.log(temp)
           each.text = temp

@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-08 22:00:52
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:40:51
+ * @LastEditTime: 2022-10-28 11:16:41
 -->
 
 <template>
@@ -234,9 +234,9 @@ export default {
   data () {
     return {
       today: new Date(),
-      timePickerName: '',
-      timePickerType: '',
-      cityPickName: '',
+      timePickerName: '', // 当前选择的时间选择器的护照名称
+      timePickerType: '', // 当前选择的时间选择器类型(begin|end)
+      cityPickName: '', // 进入城市选择器前选中的护照类型
       showPickerCard: false, // 是否展示证件选择器
       showArea: false, // 是否展示国家/地区选择器
       CardList: [
@@ -247,9 +247,9 @@ export default {
         '台湾通行证',
         '双程证'
       ],
-      CardPick: [],
-      formList: {},
-      CardDetailList: [],
+      CardPick: [], // 选中的护照类型
+      formList: {}, // 前面个人信息表单
+      CardDetailList: [], // 每种护照的详细信息表单
       nation: {} // 国家与地区
     }
   },
@@ -259,15 +259,7 @@ export default {
       return this.CardPick.join('、')
     },
     CardDetailListPick () {
-      const ans = []
-      Array.from(this.CardPick).forEach(each => {
-        Array.from(this.CardDetailList).forEach(each2 => {
-          if (each2.cardName === each) {
-            ans.push(each2)
-          }
-        })
-      })
-      return ans
+      return this.CardDetailList.filter(item => this.CardPick.indexOf(item.cardName) >= 0)
     }
   },
   created () {
@@ -465,6 +457,7 @@ export default {
         area = national
       }
       let ans = {}
+      // 让area按照字母顺序进行排序
       area.forEach(each => {
         if (ans[each.remarks] === undefined) {
           ans[each.remarks] = []

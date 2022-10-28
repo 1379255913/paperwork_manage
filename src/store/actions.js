@@ -6,6 +6,12 @@ import { login, getLoginInfo, refreshToken } from '@/api/user'
 //   newList.push(barrageInfo)
 //   commit(types.SET_BARRAGE_LIST, newList)
 // }
+/**
+ * @description: 用户登录
+ * @param {*} commit
+ * @param {*} state
+ * @return {*}
+ */
 export const userLogin = ({ commit, state }) => {
   return login().then(res => {
     commit('loginUser', res.item.token)
@@ -14,11 +20,14 @@ export const userLogin = ({ commit, state }) => {
     })
   })
 }
-
+/**
+ * @description: 通过refreshtoken刷新toekn
+ * @param {*} commit
+ * @param {*} state
+ * @return {*}
+ */
 export const refresh = ({ commit, state }) => {
-  console.log(1)
   return refreshToken(state.refresh_token).then(res => {
-    console.log(2)
     commit('refreshToken', res.item.token.access_token)
   })
 }

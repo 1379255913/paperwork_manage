@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-14 16:38:39
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:22:53
+ * @LastEditTime: 2022-10-28 11:32:45
 -->
 <template>
   <div>
@@ -51,8 +51,8 @@
                 </p>
                 <van-icon
                   class="item_container_left_icon_state"
-                  :class="{ 'success': item.status === '0', 'fail': item.status === '1','wait': item.status === '5','back': item.status === '4'}"
-                  :name="item.status === '0' ? 'checked' : item.status === '1' ? 'clear' : item.status === '4' ? 'warning' : 'more'"
+                  :class="item.class"
+                  :name="item.icon"
                 />
               </div>
             </div>
@@ -191,6 +191,16 @@ export default {
           approval: '我',
           createDate: ans.createDate,
           status: '0'
+        })
+        const obj = {
+          0: { class: 'succsess', icon: 'checked' },
+          1: { class: 'fail', icon: 'clear' },
+          4: { class: 'wait', icon: 'more' },
+          5: { class: 'back', icon: 'warning' }
+        }
+        temp.forEach(each => {
+          each.class = obj[each.status].class
+          each.icon = obj[each.status].icon
         })
         this.processList = temp
       })

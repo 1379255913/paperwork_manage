@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 12:51:09
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:28:40
+ * @LastEditTime: 2022-10-28 12:00:36
 -->
 <template>
   <div>
@@ -93,8 +93,8 @@ export default {
   methods: {
     /**
      * @description: 标签页改变事件
-     * @param {*} name tab名
-     * @param {*} title tab标题
+     * @param {Number} name tab名
+     * @param {String} title tab标题
      * @return {*}
      */
     onChange (name, title) {
@@ -111,7 +111,7 @@ export default {
     },
     /**
      * @description: 获取用证记录
-     * @param {*} status 用证记录的种类
+     * @param {Number} status 用证记录的种类
      * @return {*}
      */
     getRecord (status) {
@@ -126,12 +126,7 @@ export default {
           this.noReadNumber = ans.length
         }
         ans.forEach(each => {
-          let cardName = ''
-          paperwork.forEach(each2 => {
-            if (each.type === each2.value) {
-              cardName = each2.label
-            }
-          })
+          const cardName = paperwork.find(item => item.value === each.type)?.label ?? ''
           each.title = `${each.leader}的${cardName}`
           each.cardName = cardName
           const temp = []
@@ -159,7 +154,7 @@ export default {
     },
     /**
      * @description: 跳转到用证记录详细信息
-     * @param {String|Number} id
+     * @param {String|Number} id 用证记录id
      * @return {*}
      */
     onChangeRouter (id) {
