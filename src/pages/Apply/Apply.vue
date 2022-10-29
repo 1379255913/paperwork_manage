@@ -3,40 +3,13 @@
  * @Author: 张艺耀
  * @Date: 2022-10-08 22:00:52
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-28 11:16:41
+ * @LastEditTime: 2022-10-29 17:48:59
 -->
 
 <template>
   <div>
-    <van-form>
-      <van-field
-        v-for="(item,index) in formList"
-        :key="index"
-        v-model="item.value"
-        :name="item.name"
-        :label="item.label"
-        :placeholder="item.placeholder"
-        readonly
-        required
-      >
-        <template
-          v-if="item.type==='radio'"
-          #input
-        >
-          <van-radio-group
-            v-model="item.value"
-            direction="horizontal"
-          >
-            <van-radio
-              v-for="(item2,index2) in item.children"
-              :key="index2"
-              :name="item2.name"
-            >
-              {{ item2.label }}
-            </van-radio>
-          </van-radio-group>
-        </template>
-      </van-field>
+    <van-form @submit="onSubmit">
+      <read-only-field :form-list="formList" />
       <van-field
         v-model="CardPickname"
         name="选择证件"
@@ -44,6 +17,7 @@
         placeholder="请选择申请的证件"
         readonly
         required
+        :rules="[{ required: true}]"
         @click="showPickerCard=true"
       >
         {{ CardPickname }}
@@ -86,6 +60,7 @@
           placeholder="请选择证照开始使用时间"
           readonly
           required
+          :rules="[{ required: true}]"
           @click="onClickDatePicker(item.cardName, 'begin')"
         >
           {{ item.beginTime }}
@@ -97,6 +72,7 @@
           placeholder="请选择证照结束使用时间"
           readonly
           required
+          :rules="[{ required: true}]"
           @click="onClickDatePicker(item.cardName, 'end')"
         >
           {{ item.endTime }}
@@ -108,6 +84,7 @@
           placeholder="请选择一个城市"
           readonly
           required
+          :rules="[{ required: true}]"
           @click="onClickCityPicker(item.cardName)"
         >
           {{ item.city }}
@@ -118,6 +95,7 @@
           label="具体地点"
           placeholder="请输入具体的地点"
           required
+          :rules="[{ required: true}]"
         >
           {{ item.position }}
         </van-field>
@@ -129,6 +107,7 @@
           type="textarea"
           maxlength="50"
           required
+          :rules="[{ required: true}]"
         >
           {{ item.reason }}
         </van-field>
@@ -223,16 +202,20 @@
 
 <script>
 import { mapState } from 'vuex'
-import { education, national, area1, area2 } from '@/utils/dictory'
+import { national, area1, area2 } from '@/utils/dictory'
+import { postApply } from '@/api/inform'
 import { formatDateTime } from '@/utils/formatday'
 import { Notify } from 'vant'
 import Tips from './components/Tips.vue'
+import ReadOnlyField from './components/ReadOnlyField.vue'
 export default {
   components: {
-    Tips
+    Tips,
+    ReadOnlyField
   },
   data () {
     return {
+      isLoading: false,
       today: new Date(),
       timePickerName: '', // 当前选择的时间选择器的护照名称
       timePickerType: '', // 当前选择的时间选择器类型(begin|end)
@@ -263,121 +246,6 @@ export default {
     }
   },
   created () {
-    let edu = ''
-    for (let i = 0; i < education.length; i++) {
-      if (education[i].value === this.userInfo.xwm) {
-        edu = education[i].label
-      }
-    }
-    this.formList = [
-      {
-        name: '姓名',
-        label: '姓名',
-        type: 'input',
-        placeholder: '请输入姓名',
-        value: this.userInfo.xm
-      },
-      {
-        name: '性别',
-        label: '性别',
-        type: 'radio',
-        children: [
-          {
-            name: '0',
-            label: '男'
-          },
-          {
-            name: '1',
-            label: '女'
-          }
-        ],
-        value: this.userInfo.xbm
-      },
-      {
-        name: '出生日期',
-        label: '出生日期',
-        type: 'input',
-        placeholder: '请输入出生日期',
-        value: this.userInfo.csrq
-      },
-      {
-        name: '籍贯',
-        label: '籍贯',
-        type: 'input',
-        placeholder: '请输入籍贯',
-        value: this.userInfo.jgm
-      },
-      {
-        name: '民族',
-        label: '民族',
-        type: 'input',
-        placeholder: '请输入民族',
-        value: this.userInfo.mzm
-      },
-      {
-        name: '政治面貌',
-        label: '政治面貌',
-        type: 'input',
-        placeholder: '请输入政治面貌',
-        value: this.userInfo.zzmmm
-      },
-      {
-        name: '身份证号码',
-        label: '身份证号码',
-        type: 'input',
-        placeholder: '请输入身份证号码',
-        value: this.userInfo.zjhm
-      },
-      {
-        name: '文化程度',
-        label: '文化程度',
-        type: 'input',
-        placeholder: '请输入文化程度',
-        value: edu
-      },
-      {
-        name: '工作部门',
-        label: '工作部门',
-        type: 'input',
-        placeholder: '请输入工作部门',
-        value: this.userInfo.ssdwm
-      },
-      {
-        name: '职务',
-        label: '职务',
-        type: 'input',
-        placeholder: '请输入职务',
-        value: this.userInfo.przyjszwm
-      },
-      {
-        name: '家庭住址',
-        label: '家庭住址',
-        type: 'input',
-        placeholder: '请输入家庭住址',
-        value: this.userInfo.jtzz
-      },
-      {
-        name: '联系电话',
-        label: '联系电话',
-        type: 'input',
-        placeholder: '请输入联系电话',
-        value: this.userInfo.phone
-      },
-      {
-        name: '紧急联系人',
-        label: '紧急联系人',
-        type: 'input',
-        placeholder: '请输入紧急联系人',
-        value: this.userInfo.yjlxr
-      },
-      {
-        name: '紧急联系电话',
-        label: '紧急联系电话',
-        type: 'input',
-        placeholder: '请输入紧急联系电话',
-        value: this.userInfo.yjlxrdh
-      }
-    ]
     const ans = []
     for (let i = 0; i < 6; i++) {
       ans.push({
@@ -406,9 +274,10 @@ export default {
      * @return {*}
      */
     onConfirm (value) {
-      Array.from(this.CardDetailList).forEach(each => {
+      this.CardDetailList.forEach(each => {
         if (each.cardName === this.timePickerName) {
           if (this.timePickerType === 'begin') {
+            each.beginTimePicker = value
             each.beginTime = formatDateTime(value)
             each.beginTimePickerShow = false
           } else {
@@ -425,7 +294,7 @@ export default {
      * @return {*}
      */
     onClickDatePicker (name, type) {
-      Array.from(this.CardDetailList).forEach(each => {
+      this.CardDetailList.forEach(each => {
         if (each.cardName === name) {
           this.timePickerType = type
           this.timePickerName = each.cardName
@@ -448,33 +317,13 @@ export default {
      */
     onClickCityPicker (name) {
       this.cityPickName = name
-      let area = []
       if (name === '港澳通行证') {
-        area = area1
+        this.nation = area1
       } else if (name === '台湾通行证') {
-        area = area2
+        this.nation = area2
       } else {
-        area = national
+        this.nation = national
       }
-      let ans = {}
-      // 让area按照字母顺序进行排序
-      area.forEach(each => {
-        if (ans[each.remarks] === undefined) {
-          ans[each.remarks] = []
-        }
-        ans[each.remarks].push({
-          label: each.label,
-          key: each.id
-        })
-      })
-      const keysSorted = Object.keys(ans).sort()
-      console.log(keysSorted)
-      const newObj = {}
-      for (let i = 0; i < keysSorted.length; i++) {
-        newObj[keysSorted[i]] = ans[keysSorted[i]]
-      }
-      ans = newObj
-      this.nation = ans
       this.showArea = true
     },
     /**
@@ -483,12 +332,53 @@ export default {
      * @return {*}
      */
     onConfirmCityPicker (city) {
-      Array.from(this.CardDetailList).forEach(each => {
+      this.CardDetailList.forEach(each => {
         if (each.cardName === this.cityPickName) {
           each.city = city
         }
       })
       this.showArea = false
+    },
+    /**
+     * @description: 表单提交
+     * @return {*}
+     */
+    onSubmit () {
+      const data = {
+        leader: this.userInfo.xm,
+        sex: this.userInfo.xbm,
+        birthDate: this.userInfo.csrq,
+        birthplace: this.userInfo.jgm,
+        nation: this.userInfo.mzm,
+        politicsStatus: this.userInfo.zzmmm,
+        idCard: this.userInfo.zjhm,
+        education: this.userInfo.xwm,
+        department: this.userInfo.ssdwm,
+        job: this.userInfo.przyjszwm,
+        address: this.userInfo.jtzz,
+        tellphone: this.userInfo.phone,
+        emergencyContact: this.userInfo.yjlxr,
+        emergencyPhone: this.userInfo.yjlxrdh,
+        approvalFormEntityList: this.CardDetailListPick.map(each => {
+          return {
+            certificate: each.cardName,
+            certificateId: '',
+            destination: each.city + each.position,
+            reason: each.reason,
+            startTime: each.beginTime,
+            endTime: each.endTime,
+            type: `${this.CardList.indexOf(each.cardName) + 1}`
+          }
+        })
+      }
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true
+      })
+      postApply(data).then(_ => {
+        this.isLoading = false
+        this.$toast.clear()
+      })
     }
   }
 }

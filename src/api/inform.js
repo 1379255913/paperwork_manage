@@ -115,3 +115,15 @@ export function getUserApproval (status) {
     params: params
   })
 }
+/**
+ * @description: 提交用证申请表单
+ * @param {Object} data 表单详细数据
+ * @return {*}
+ */
+export function postApply (data) {
+  return request({
+    url: '/api/lic/approval/v1.0/save',
+    method: 'post',
+    data: data
+  })
+}

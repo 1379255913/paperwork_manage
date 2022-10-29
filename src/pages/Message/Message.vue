@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-10 14:45:02
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-28 10:29:44
+ * @LastEditTime: 2022-10-29 12:23:38
 -->
 <template>
   <div>
@@ -86,13 +86,10 @@ export default {
         forbidClick: true
       })
       getMessage().then(res => {
-        console.log(res.page.list)
-        const ans = []
-        res.page.list.forEach(each => {
+        this.messageList = res.page.list.map(each => {
           each.isFold = true
-          ans.push(each)
+          return each
         })
-        this.messageList = ans
         this.$toast.clear()
         this.isRefreshing = false
       })
@@ -103,7 +100,7 @@ export default {
      * @return {*}
      */
     onClickFold (id) {
-      Array.from(this.messageList).forEach(each => {
+      this.messageList.forEach(each => {
         if (each.id === id) {
           each.isFold = !each.isFold
         }

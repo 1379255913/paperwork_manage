@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-14 21:03:10
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-28 10:21:44
+ * @LastEditTime: 2022-10-29 14:54:18
 -->
 <template>
   <div>
@@ -15,31 +15,7 @@
         color="#b13a3d"
         @click="onChange"
       >
-        <van-tab
-          title="等待审批"
-          name="5"
-          class="tabs"
-          :badge="waitedNumber"
-          @click="onChange"
-        />
-        <van-tab
-          title="通过"
-          name="0"
-          class="tabs"
-          @click="onChange"
-        />
-        <van-tab
-          title="拒绝"
-          name="1"
-          class="tabs"
-          @click="onChange"
-        />
-        <van-tab
-          title="全部"
-          name="-1"
-          class="tabs"
-          @click="onChange"
-        />
+        <my-tab :waited-number="waitedNumber" />
         <div>
           <van-pull-refresh
             v-model="isRefreshing"
@@ -79,11 +55,13 @@
 <script>
 import pull from '@/components/Pull.vue'
 import card from '@/components/Card.vue'
+import myTab from '@/components/Tab.vue'
 import { getUserApproval } from '@/api/inform'
 export default {
   components: {
     pull,
-    card
+    card,
+    myTab
   },
   data () {
     return {
@@ -119,7 +97,6 @@ export default {
         forbidClick: true
       })
       getUserApproval(status).then(res => {
-        const ans = res.page.list
         if (status === 5) {
           this.waitedNumber = res.page.count
         }
@@ -129,25 +106,18 @@ export default {
           1: { tag: '拒绝', color: 'danger' },
           4: { tag: '撤回', color: 'default' }
         }
-        ans.forEach(each => {
+        this.approvalList = res.page.list.map(each => {
           each.title = `${each.leader}提交的用证申请`
           each.tag = obj[each.status].tag
           each.color = obj[each.status].color
-          const temp = []
-          temp.push(`联系电话：${each.tellphone}`)
-          temp.push(`工作部门：${each.department}`)
-          let processList = {}
-          if (each.approvalProcessList && each.approvalProcessList.length > 0) {
-            processList = each.approvalProcessList[0]
-            console.log(processList)
-          } else {
-            processList = undefined
-          }
-          temp.push(`当前审批节点：${processList?.currentOrganization} ${processList?.approval}`)
-          console.log(temp)
-          each.text = temp
+          const processList = each?.approvalProcessList?.[0]
+          each.text = [
+            `联系电话：${each.tellphone}`,
+            `工作部门：${each.department}`,
+            `当前审批节点：${processList?.currentOrganization} ${processList?.approval}`
+          ]
+          return each
         })
-        this.approvalList = ans
         this.isLoading = false
         this.$toast.clear()
       })

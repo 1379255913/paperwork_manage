@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-10 20:09:01
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:00:03
+ * @LastEditTime: 2022-10-29 15:16:45
 -->
 <template>
   <div>
@@ -13,35 +13,13 @@
           <div class="information_title">
             基础信息
           </div>
-          <div
-            v-for="(item, index) in informList1"
-            :key="index"
-            class="van-hairline--bottom cell"
-          >
-            <div class="cell_title">
-              {{ item.title }}
-            </div>
-            <div class="cell_value">
-              {{ item.label }}
-            </div>
-          </div>
+          <inform-card :inform-list="informList1" />
         </div>
         <div class="information_common">
           <div class="information_title">
             常用信息
           </div>
-          <div
-            v-for="(item, index) in informList2"
-            :key="index"
-            class="van-hairline--bottom cell"
-          >
-            <div class="cell_title">
-              {{ item.title }}
-            </div>
-            <div class="cell_value">
-              {{ item.label }}
-            </div>
-          </div>
+          <inform-card :inform-list="informList2" />
         </div>
         <div class="information_common" />
       </div>
@@ -51,7 +29,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import informCard from './components/InformCard.vue'
 export default {
+  components: {
+    informCard
+  },
   data () {
     return {
       informList1: [],

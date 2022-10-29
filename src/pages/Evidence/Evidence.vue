@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 12:51:09
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-28 12:00:36
+ * @LastEditTime: 2022-10-29 12:20:36
 -->
 <template>
   <div>
@@ -17,17 +17,20 @@
         @click="onChange"
       >
         <van-tab
+          name="0"
           title="未归还"
           class="tabs"
           :badge="noReadNumber"
           @click="onChange"
         />
         <van-tab
+          name="1"
           title="已归还"
           class="tabs"
           @click="onChange"
         />
         <van-tab
+          name="-1"
           title="全部"
           class="tabs"
           @click="onChange"
@@ -98,16 +101,9 @@ export default {
      * @return {*}
      */
     onChange (name, title) {
-      if (title === '未归还') {
-        this.getRecord(0)
-        this.type = 0
-      } else if (title === '已归还') {
-        this.getRecord(1)
-        this.type = 1
-      } else if (title === '全部') {
-        this.getRecord(-1)
-        this.type = -1
-      }
+      name = parseInt(name)
+      this.getRecord(name)
+      this.type = name
     },
     /**
      * @description: 获取用证记录
@@ -121,25 +117,23 @@ export default {
         forbidClick: true
       })
       getEvidenceRecord(status, store.state.userInfo.id).then(res => {
-        const ans = res.page.list
         if (status === 0) {
-          this.noReadNumber = ans.length
+          this.noReadNumber = res.page.list.length
         }
-        ans.forEach(each => {
+        this.recordList = res.page.list.map(each => {
           const cardName = paperwork.find(item => item.value === each.type)?.label ?? ''
           each.title = `${each.leader}的${cardName}`
           each.cardName = cardName
-          const temp = []
-          temp.push(`借出时间：${each.outTime}`)
-          temp.push(`归还时间：${each.returnTime}`)
-          temp.push(`借出类型：${cardName}`)
-          temp.push(`地点：${each.destination}`)
-          temp.push(`事由：${each.reason}`)
-          each.text = temp
+          each.text = [
+            `借出时间：${each.outTime}`,
+            `归还时间：${each.returnTime}`,
+            `借出类型：${cardName}`,
+            `地点：${each.destination}`,
+            `事由：${each.reason}`
+          ]
+          return each
         })
-        console.log(ans)
-        store.commit('setRecordDetail', ans)
-        this.recordList = ans
+        store.commit('setRecordDetail', this.recordList)
         this.isLoading = false
         this.$toast.clear()
       })
@@ -158,7 +152,6 @@ export default {
      * @return {*}
      */
     onChangeRouter (id) {
-      console.log(2)
       this.$router.push({ path: `/record-detail/${id}` })
     }
   }

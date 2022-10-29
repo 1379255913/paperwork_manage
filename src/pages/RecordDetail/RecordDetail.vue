@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 17:37:45
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-28 11:45:44
+ * @LastEditTime: 2022-10-29 14:24:34
 -->
 <template>
   <div>
@@ -24,20 +24,7 @@
           {{ storeData.certificateId }}
         </div>
       </div>
-      <ul class="form_detail">
-        <li
-          v-for="(item,index) in informList"
-          :key="index"
-          class="form_detail_item"
-        >
-          <div class="form_detail_item_title">
-            {{ item[0] }}
-          </div>
-          <div class="form_detail_item_text">
-            {{ item[1] }}
-          </div>
-        </li>
-      </ul>
+      <select-detail />
     </div>
   </div>
 </template>
@@ -45,7 +32,11 @@
 <script>
 import store from '@/store/index'
 import { mapState } from 'vuex'
+import selectDetail from './components/selectDetail.vue'
 export default {
+  components: {
+    selectDetail
+  },
   data () {
     return {
       informList: []
@@ -56,17 +47,6 @@ export default {
   },
   created () {
     store.commit('getRecordDetailByID', this.$route.params.id)
-    if (Object.keys(store.state.selectDetail).length !== 0) {
-      const temp = []
-      temp.push(['借出时间', store.state.selectDetail.outTime])
-      temp.push(['归还时间', store.state.selectDetail.returnTime])
-      temp.push(['时长', store.state.selectDetail.returnTime])
-      temp.push(['借出类型', store.state.selectDetail.cardName])
-      temp.push(['地点', store.state.selectDetail.destination])
-      temp.push(['事由', store.state.selectDetail.reason])
-      temp.push(['归还提醒时间', store.state.selectDetail.returnTime])
-      this.informList = temp
-    }
   },
   mounted () { },
   methods: {
@@ -90,27 +70,6 @@ export default {
     font-size: 3.2vw;
     line-height: 1.6;
     color: #868686;
-  }
-}
-
-.form_detail {
-  padding: 4vw 4vw 1.33333vw;
-  margin: 4vw 2.66667vw;
-  background-color: #fff;
-  border-radius: 2.66667vw;
-
-  .form_detail_item {
-    margin-bottom: 2.66667vw;
-    line-height: 1.6;
-
-    .form_detail_item_title {
-      font-size: 3.2vw;
-      color: #868686;
-    }
-
-    .form_detail_item_text {
-      font-size: 4vw;
-    }
   }
 }
 
