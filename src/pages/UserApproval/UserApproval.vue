@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-14 21:03:10
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-29 14:54:18
+ * @LastEditTime: 2022-10-31 20:33:50
 -->
 <template>
   <div>
@@ -15,58 +15,36 @@
         color="#b13a3d"
         @click="onChange"
       >
-        <my-tab :waited-number="waitedNumber" />
-        <div>
-          <van-pull-refresh
-            v-model="isRefreshing"
-            class="pull-refresh"
-            @refresh="onRefresh"
-          >
-            <div class="application_container_content">
-              <router-link
-                v-for="item in approvalList"
-                :key="item.id"
-                :to="`/approve-process/${item.applyId}`"
-                tag="div"
-              >
-                <card
-                  :title="item.title"
-                  :time="item.createDate"
-                  tag-left-color="#1989fa"
-                  :submit-name="item.leader"
-                  :text="item.text"
-                  :tag-right-title="item.tag"
-                  :tag-right-type="item.color"
-                />
-              </router-link>
-              <pull v-if="approvalList.length!==0" />
-            </div>
-          </van-pull-refresh>
-          <van-empty
-            v-if="approvalList.length===0"
-            description="暂无数据"
-          />
-        </div>
+        <my-tab :tab-list="tabList" />
+        <my-list
+          :data-list="approvalList"
+          to-prefix="approve-process"
+          tag-left-color="#1989fa"
+          @refresh="onRefresh"
+        />
       </van-tabs>
     </div>
   </div>
 </template>
 
 <script>
-import pull from '@/components/Pull.vue'
-import card from '@/components/Card.vue'
 import myTab from '@/components/Tab.vue'
+import myList from '@/components/List.vue'
 import { getUserApproval } from '@/api/inform'
 export default {
   components: {
-    pull,
-    card,
-    myTab
+    myTab,
+    myList
   },
   data () {
     return {
       active: 5,
-      waitedNumber: 0,
+      tabList: [
+        { title: '等待审批', name: '5', waitedNumber: '' },
+        { title: '通过', name: '0', waitedNumber: '' },
+        { title: '拒绝', name: '1', waitedNumber: '' },
+        { title: '全部', name: '-1', waitedNumber: '' }
+      ],
       isLoading: false,
       approvalList: [],
       isRefreshing: false
@@ -98,7 +76,7 @@ export default {
       })
       getUserApproval(status).then(res => {
         if (status === 5) {
-          this.waitedNumber = res.page.count
+          this.tabList[0].waitedNumber = res.page.count
         }
         const obj = {
           5: { tag: '等待审批', color: 'primary' },
@@ -107,9 +85,11 @@ export default {
           4: { tag: '撤回', color: 'default' }
         }
         this.approvalList = res.page.list.map(each => {
+          each.id = each.applyId
           each.title = `${each.leader}提交的用证申请`
           each.tag = obj[each.status].tag
           each.color = obj[each.status].color
+          each.submitName = each.leader
           const processList = each?.approvalProcessList?.[0]
           each.text = [
             `联系电话：${each.tellphone}`,
@@ -118,6 +98,7 @@ export default {
           ]
           return each
         })
+        console.log(this.approvalList.length)
         this.isLoading = false
         this.$toast.clear()
       })

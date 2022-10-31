@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-01 14:54:47
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:29:41
+ * @LastEditTime: 2022-10-31 20:39:48
 -->
 <template>
   <div class="login">
@@ -16,6 +16,7 @@
         v-model="username"
         name="用户名"
         placeholder="用户名"
+        :rules="[{ required: true}]"
       >
         <template slot="left-icon">
           <div class="login_form_icon account" />
@@ -27,6 +28,7 @@
         type="password"
         name="密码"
         placeholder="密码"
+        :rules="[{ required: true}]"
       >
         <template slot="left-icon">
           <div class="login_form_icon password" />

@@ -3,30 +3,17 @@
  * @Author: 张艺耀
  * @Date: 2022-10-29 14:41:48
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-29 14:52:44
+ * @LastEditTime: 2022-10-31 19:24:36
 -->
 <template>
   <div>
     <van-tab
-      title="等待审批"
-      name="5"
+      v-for="(item, index) in tabList"
+      :key="index"
+      :title="item.title"
+      :name="item.name"
       class="tabs"
-      :badge="waitedNumber"
-    />
-    <van-tab
-      title="通过"
-      name="0"
-      class="tabs"
-    />
-    <van-tab
-      title="拒绝"
-      name="1"
-      class="tabs"
-    />
-    <van-tab
-      title="全部"
-      name="-1"
-      class="tabs"
+      :badge="item.waitedNumber"
     />
   </div>
 </template>
@@ -34,10 +21,10 @@
 <script>
 export default {
   props: {
-    waitedNumber: {
-      type: Number,
+    tabList: {
+      type: Array,
       default () {
-        return 0
+        return []
       }
     }
   },

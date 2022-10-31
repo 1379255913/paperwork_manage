@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 12:51:09
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-29 12:20:36
+ * @LastEditTime: 2022-10-31 20:30:10
 -->
 <template>
   <div>
@@ -16,25 +16,7 @@
         color="#b13a3d"
         @click="onChange"
       >
-        <van-tab
-          name="0"
-          title="未归还"
-          class="tabs"
-          :badge="noReadNumber"
-          @click="onChange"
-        />
-        <van-tab
-          name="1"
-          title="已归还"
-          class="tabs"
-          @click="onChange"
-        />
-        <van-tab
-          name="-1"
-          title="全部"
-          class="tabs"
-          @click="onChange"
-        />
+        <my-tab :tab-list="tabList" />
         <div>
           <van-pull-refresh
             v-model="isRefreshing"
@@ -55,13 +37,13 @@
                   :text="item.text"
                 />
               </router-link>
+              <van-empty
+                v-if="recordList.length===0"
+                description="暂无数据"
+              />
+              <pull v-if="recordList.length!==0" />
             </div>
           </van-pull-refresh>
-          <van-empty
-            v-if="recordList.length===0"
-            description="暂无数据"
-          />
-          <pull v-if="recordList.length!==0" />
         </div>
       </van-tabs>
     </div>
@@ -71,13 +53,15 @@
 <script>
 import card from '@/components/Card.vue'
 import pull from '@/components/Pull.vue'
+import myTab from '@/components/Tab.vue'
 import store from '@/store/index'
 import { getEvidenceRecord } from '@/api/inform'
 import { paperwork } from '@/utils/dictory'
 export default {
   components: {
     card,
-    pull
+    pull,
+    myTab
   },
   data () {
     return {
@@ -85,8 +69,12 @@ export default {
       isLoading: false,
       active: 0,
       type: 0,
-      noReadNumber: 0,
-      recordList: []
+      recordList: [],
+      tabList: [
+        { title: '未归还', name: '0', waitedNumber: '' },
+        { title: '已归还', name: '1', waitedNumber: '' },
+        { title: '全部', name: '-1', waitedNumber: '' }
+      ]
     }
   },
   created () { },
@@ -118,7 +106,7 @@ export default {
       })
       getEvidenceRecord(status, store.state.userInfo.id).then(res => {
         if (status === 0) {
-          this.noReadNumber = res.page.list.length
+          this.tabList[0].waitedNumber = res.page.list.length
         }
         this.recordList = res.page.list.map(each => {
           const cardName = paperwork.find(item => item.value === each.type)?.label ?? ''

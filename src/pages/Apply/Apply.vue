@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-08 22:00:52
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-29 17:48:59
+ * @LastEditTime: 2022-10-31 20:44:33
 -->
 
 <template>
@@ -246,10 +246,9 @@ export default {
     }
   },
   created () {
-    const ans = []
-    for (let i = 0; i < 6; i++) {
-      ans.push({
-        cardName: this.CardList[i],
+    this.CardDetailList = this.CardList.map(each => {
+      return {
+        cardName: each,
         cardID: '无',
         isNewCard: '是',
         beginTime: '',
@@ -261,9 +260,8 @@ export default {
         city: '',
         position: '',
         reason: ''
-      })
-    }
-    this.CardDetailList = ans
+      }
+    })
   },
   mounted () {
   },
@@ -317,12 +315,15 @@ export default {
      */
     onClickCityPicker (name) {
       this.cityPickName = name
-      if (name === '港澳通行证') {
-        this.nation = area1
-      } else if (name === '台湾通行证') {
-        this.nation = area2
-      } else {
-        this.nation = national
+      switch (name) {
+        case '港澳通行证':
+          this.nation = area1
+          break
+        case '台湾通行证':
+          this.nation = area2
+          break
+        default:
+          this.nation = national
       }
       this.showArea = true
     },

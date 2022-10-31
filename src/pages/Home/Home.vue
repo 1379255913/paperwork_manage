@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-01 14:35:45
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:29:08
+ * @LastEditTime: 2022-10-31 18:59:37
 -->
 <template>
   <div class="home_container">
@@ -16,8 +16,8 @@
         <div class="home_container_header_user">
           <van-image
             round
-            width="42"
-            height="42"
+            width="10.66667vw"
+            height="10.66667vw"
             src="http://112.111.0.102:12384/img/avatar.ba451d65.jpg"
           />
           <div
@@ -36,11 +36,13 @@
       </p>
       <van-swipe
         class="my-swipe"
+        style="height: 150px;"
         indicator-color="white"
       >
         <van-swipe-item>
           <van-image
-            height="150"
+            height="100%"
+            width="100%"
             fit="cover"
             src="http://112.111.0.102:12384/img/banner.4ef3552b.png"
           />
@@ -174,12 +176,12 @@ p {
     font-size: 5.86667vw;
   }
 
-  .my-swipe .van-swipe-item {
-    height: 150px;
+  .my-swipe {
     font-size: 20px;
     color: #fff;
     text-align: center;
     background-color: #39a9ed;
+    border-radius: 1.33333vw;
   }
 }
 

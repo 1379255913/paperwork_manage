@@ -3,12 +3,13 @@
  * @Author: 张艺耀
  * @Date: 2022-10-26 11:36:38
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 19:22:24
+ * @LastEditTime: 2022-10-31 19:49:38
 -->
 <template>
   <div>
     <van-overlay
       :show="showTips"
+      :lock-scroll="false"
     >
       <div class="need_container">
         <div class="need_container_content">

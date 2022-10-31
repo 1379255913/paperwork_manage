@@ -3,7 +3,7 @@
  * @Author: 张艺耀
  * @Date: 2022-10-13 14:38:39
  * @LastEditors: 张艺耀
- * @LastEditTime: 2022-10-26 11:29:59
+ * @LastEditTime: 2022-10-31 20:37:44
 -->
 
 <template>
@@ -53,42 +53,49 @@
 <script>
 export default {
   props: {
+    // 标题
     title: {
       type: String,
       default () {
         return ''
       }
     },
+    // 右侧的时间
     time: {
       type: String,
       default () {
         return ''
       }
     },
+    // 左下角tag的颜色
     tagLeftColor: {
       type: String,
       default () {
         return '#b13a3d'
       }
     },
+    // 提交人的名字
     submitName: {
       type: String,
       default () {
         return '庄晨忠'
       }
     },
+    // 右下角tag的标题
     tagRightTitle: {
       type: String,
       default () {
         return ''
       }
     },
+    // 右下角tag的种类
     tagRightType: {
       type: String,
       default () {
         return 'primary'
       }
     },
+    // 中间文字的列表
     text: {
       type: Array,
       default () {
